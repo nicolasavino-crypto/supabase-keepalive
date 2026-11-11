@@ -1,0 +1,16 @@
+name: supabase-keepalive
+on:
+  schedule:
+      - cron: "17 6 * * *"
+        workflow_dispatch:
+        permissions:
+          contents: write
+          jobs:
+            ping:
+                runs-on: ubuntu-latest
+                    steps:
+                          - uses: actions/checkout@v4
+                                - name: Ping Supabase
+                                        run: curl -sS -o /dev/null -w "Supabase HTTP %{http_code}" -H "apikey: sb_publishable_hF6tXnLe5DLhQomTnHBVGA_ciq-WDCC" "https://vdwsdnrnuaalopfdrzhd.supabase.co/rest/v1/profiles?select=count&limit=1"
+                                              - name: Keep repo active
+                                                      run: date -u > last-ping.txt && git config user.name keepalive-bot && git config user.email actions@users.noreply.github.com && git add last-ping.txt && git commit -m keep-alive && git push
